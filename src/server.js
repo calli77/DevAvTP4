@@ -1,12 +1,18 @@
+'use strict'
 import Fastify from "fastify"
 import fastifyBasicAuth from "@fastify/basic-auth"
-
+import fs from 'node:fs'
 
 const port = 3000;
 const authenticate = {realm: 'Westeros'}
 
 const fastify = Fastify({
-    logger: true
+    logger: true,
+    https: {
+        allowHTTP1: true,
+        key: fs.readFileSync('./src/server.key'),
+        cert: fs.readFileSync('./src/server.crt')
+    }
 })
 
 fastify.register(fastifyBasicAuth, {
@@ -29,6 +35,15 @@ fastify.after(() => {
         method: 'GET',
         url: '/secu',
         onRequest: fastify.basicAuth,
+        handler: async (req, reply) => {
+            return {
+                replique: 'Un Lannister paye toujours ses dettes !'
+            }
+        }
+    })
+    fastify.route({
+        method: 'GET',
+        url: '/autre',
         handler: async (req, reply) => {
             return {
                 replique: 'Un Lannister paye toujours ses dettes !'
