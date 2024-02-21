@@ -4,8 +4,8 @@ import fastifyJwt from "@fastify/jwt";
 export default fp(async function (app, opts) {
     app.register(fastifyJwt, {
         secret: {
-            private: 'path/to/private.pem',
-            public: 'path/to/public.pem'
+            private: './.ssl/private.pem',
+            public: './.ssl/public.pem'
         },
         sign: {
             algorithm: 'ES256',
